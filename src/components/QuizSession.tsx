@@ -1,17 +1,24 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getCategory } from '../data/categories'
+import { shuffleChoices } from '../quizUtils'
 import { recordAttempt } from '../storage'
 import type { QuizQuestion } from '../types'
 
 interface Props {
   title: string
-  questions: QuizQuestion[]
+  // 出題する問題を選ぶ関数。開始時と「もう一度挑戦する」のたびに呼び出す
+  pickQuestions: () => QuizQuestion[]
   // 復習モードなど、複数分野の問題が混ざる場合に分野名を表示する
   showCategory?: boolean
 }
 
-export default function QuizSession({ title, questions, showCategory = false }: Props) {
+function prepareQuestions(pickQuestions: () => QuizQuestion[]): QuizQuestion[] {
+  return pickQuestions().map(shuffleChoices)
+}
+
+export default function QuizSession({ title, pickQuestions, showCategory = false }: Props) {
+  const [questions, setQuestions] = useState(() => prepareQuestions(pickQuestions))
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [answered, setAnswered] = useState(false)
@@ -19,11 +26,25 @@ export default function QuizSession({ title, questions, showCategory = false }: 
   const [finished, setFinished] = useState(false)
 
   const handleRestart = () => {
+    setQuestions(prepareQuestions(pickQuestions))
     setIndex(0)
     setSelected(null)
     setAnswered(false)
     setCorrectCount(0)
     setFinished(false)
+  }
+
+  // 復習モードで全問克服した後に「もう一度挑戦する」を押した場合など
+  if (questions.length === 0) {
+    return (
+      <div>
+        <h1 className="page-title">{title}</h1>
+        <p className="empty-state">出題できる問題がありません。</p>
+        <Link className="btn btn-primary btn-block" to="/">
+          ホームに戻る
+        </Link>
+      </div>
+    )
   }
 
   if (finished) {

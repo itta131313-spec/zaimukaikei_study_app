@@ -1,13 +1,10 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import QuizSession from '../components/QuizSession'
+import { pickRandom, QUESTIONS_PER_SESSION } from '../quizUtils'
 import { getReviewQuestions } from '../storage'
 
 export default function Review() {
-  // 解いている途中で出題リストが変わらないよう、開始時点の問題で固定する
-  const [questions] = useState(getReviewQuestions)
-
-  if (questions.length === 0) {
+  if (getReviewQuestions().length === 0) {
     return (
       <div>
         <h1 className="page-title">間違えた問題の復習</h1>
@@ -23,5 +20,12 @@ export default function Review() {
     )
   }
 
-  return <QuizSession title="間違えた問題の復習" questions={questions} showCategory />
+  // 「もう一度挑戦する」を押した時点で、まだ間違えたままの問題から選び直す
+  return (
+    <QuizSession
+      title="間違えた問題の復習"
+      pickQuestions={() => pickRandom(getReviewQuestions(), QUESTIONS_PER_SESSION)}
+      showCategory
+    />
+  )
 }
