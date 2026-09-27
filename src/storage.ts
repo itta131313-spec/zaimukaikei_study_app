@@ -1,4 +1,4 @@
-import type { CategoryId, QuizAttempt } from './types'
+import type { CategoryId, QuizAttempt, QuizQuestion } from './types'
 import { quizzes } from './data/quizzes'
 
 const STORAGE_KEY = 'zaimukaikei-study-app:attempts'
@@ -48,22 +48,43 @@ export function getCategoryStats(categoryId: CategoryId): CategoryStats {
   }
 }
 
-export interface WeakQuestion {
-  questionId: string
-  categoryId: CategoryId
-  question: string
-  attemptCount: number
-  wrongCount: number
+// 正解率がこの値未満の分野を「苦手分野」として表示する
+export const WEAK_CATEGORY_THRESHOLD = 60
+
+export type AccuracyLevel = 'none' | 'good' | 'fair' | 'weak'
+
+export function getAccuracyLevel(stats: CategoryStats): AccuracyLevel {
+  if (stats.attemptCount === 0) return 'none'
+  if (stats.accuracyRate >= 80) return 'good'
+  if (stats.accuracyRate >= WEAK_CATEGORY_THRESHOLD) return 'fair'
+  return 'weak'
 }
 
-export function getWeakQuestions(limit = 5): WeakQuestion[] {
-  const attempts = getAllAttempts()
-  const byQuestion = new Map<string, { attemptCount: number; wrongCount: number }>()
+export interface WeakQuestion {
+  question: QuizQuestion
+  attemptCount: number
+  wrongCount: number
+  // 直近の回答が正解なら「克服済み」とみなす
+  lastCorrect: boolean
+}
 
+export function getWeakQuestions(limit = 10): WeakQuestion[] {
+  const attempts = getAllAttempts()
+  const byQuestion = new Map<
+    string,
+    { attemptCount: number; wrongCount: number; lastCorrect: boolean }
+  >()
+
+  // attempts は回答した順に並んでいるため、最後に処理したものが直近の回答になる
   for (const attempt of attempts) {
-    const current = byQuestion.get(attempt.questionId) ?? { attemptCount: 0, wrongCount: 0 }
+    const current = byQuestion.get(attempt.questionId) ?? {
+      attemptCount: 0,
+      wrongCount: 0,
+      lastCorrect: false,
+    }
     current.attemptCount += 1
     if (!attempt.correct) current.wrongCount += 1
+    current.lastCorrect = attempt.correct
     byQuestion.set(attempt.questionId, current)
   }
 
@@ -72,17 +93,21 @@ export function getWeakQuestions(limit = 5): WeakQuestion[] {
     if (stats.wrongCount === 0) continue
     const question = quizzes.find((q) => q.id === questionId)
     if (!question) continue
-    result.push({
-      questionId,
-      categoryId: question.categoryId,
-      question: question.question,
-      attemptCount: stats.attemptCount,
-      wrongCount: stats.wrongCount,
-    })
+    result.push({ question, ...stats })
   }
 
-  result.sort((a, b) => b.wrongCount - a.wrongCount)
+  // 未克服の問題を先に、その中で間違えた回数が多い順に並べる
+  result.sort(
+    (a, b) => Number(a.lastCorrect) - Number(b.lastCorrect) || b.wrongCount - a.wrongCount,
+  )
   return result.slice(0, limit)
+}
+
+// 直近の回答が不正解のままになっている問題(復習モードの出題対象)
+export function getReviewQuestions(): QuizQuestion[] {
+  return getWeakQuestions(Infinity)
+    .filter((w) => !w.lastCorrect)
+    .map((w) => w.question)
 }
 
 export function clearAllRecords(): void {

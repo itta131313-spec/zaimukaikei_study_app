@@ -5,6 +5,7 @@ import Guide from './pages/Guide'
 import Home from './pages/Home'
 import Quiz from './pages/Quiz'
 import Records from './pages/Records'
+import Review from './pages/Review'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/guide/:categoryId" element={<Guide />} />
           <Route path="/quiz/:categoryId" element={<Quiz />} />
           <Route path="/dialogue/:categoryId" element={<Dialogue />} />
+          <Route path="/review" element={<Review />} />
           <Route path="/records" element={<Records />} />
         </Routes>
       </main>

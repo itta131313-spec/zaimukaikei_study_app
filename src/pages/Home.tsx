@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom'
 import { categories } from '../data/categories'
-import { getCategoryStats } from '../storage'
+import { getCategoryStats, getReviewQuestions } from '../storage'
 
 export default function Home() {
+  const reviewCount = getReviewQuestions().length
+
   return (
     <div>
       <h1 className="page-title">財務会計事務 学習アプリ</h1>
       <p className="page-subtitle">
         起債・予算・決算の実務知識を、クイズと手順ガイドで身につけましょう。
       </p>
+      {reviewCount > 0 && (
+        <Link className="review-banner" to="/review">
+          <span className="review-banner-title">間違えた問題が {reviewCount}問 あります</span>
+          <span className="review-banner-sub">タップして解き直す ›</span>
+        </Link>
+      )}
       {categories.map((category) => {
         const stats = getCategoryStats(category.id)
         return (

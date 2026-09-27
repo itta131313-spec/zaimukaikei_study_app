@@ -512,3 +512,150 @@ a {
   padding-top: 16px;
   border-top: 1px solid var(--color-border);
 }
+
+/* 正解率の色分け(よくできている / もう少し / 苦手) */
+.stat-card.level-good {
+  --level-color: var(--color-success);
+}
+
+.stat-card.level-fair {
+  --level-color: #8a6417;
+}
+
+.stat-card.level-weak {
+  --level-color: var(--color-danger);
+  border-color: var(--color-danger);
+  background: #fdf8f7;
+}
+
+.stat-card .stat-card-rate,
+.stat-card .stat-bar-fill {
+  color: var(--level-color, var(--color-primary));
+}
+
+.stat-card .stat-bar-fill {
+  background: var(--level-color, var(--color-primary));
+}
+
+.level-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--level-color, var(--color-primary));
+  vertical-align: middle;
+}
+
+.stat-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.stat-card-actions .btn {
+  flex: 1;
+}
+
+/* 分野タグ(復習モード・間違えた問題一覧で使用) */
+.category-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.weak-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.weak-item-meta .category-tag {
+  margin-bottom: 0;
+}
+
+.resolved-tag {
+  color: var(--color-success);
+  background: var(--color-success-light);
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.weak-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0 0 10px;
+}
+
+.weak-item summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.weak-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.weak-item summary::after {
+  content: '▼ 正解と解説を見る';
+  display: block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--color-primary);
+}
+
+.weak-item[open] summary::after {
+  content: '▲ 閉じる';
+}
+
+.weak-item-answer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.weak-item-answer-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin: 8px 0 2px;
+}
+
+.weak-item-answer-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.review-start-btn {
+  margin-bottom: 12px;
+}
+
+/* ホームの復習案内 */
+.review-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: var(--radius);
+  background: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  text-decoration: none;
+}
+
+.review-banner-title {
+  font-weight: 700;
+}
+
+.review-banner-sub {
+  font-size: 0.8rem;
+}
