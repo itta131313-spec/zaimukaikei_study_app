@@ -48,3 +48,11 @@ export interface DialogueQuestion {
   mistakes: DialogueMistake[]
   modelAnswer: string
 }
+
+export interface GlossaryTerm {
+  term: string
+  // 検索用のよみがな(ひらがな)
+  reading: string
+  categoryId: CategoryId
+  description: string
+}

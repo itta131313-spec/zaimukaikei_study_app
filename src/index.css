@@ -659,3 +659,95 @@ a {
 .review-banner-sub {
   font-size: 0.8rem;
 }
+
+/* 用語集 */
+.glossary-search {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  margin-bottom: 12px;
+}
+
+.glossary-search:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.filter-chip {
+  min-height: 40px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filter-chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.glossary-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0 0 8px;
+}
+
+.glossary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.glossary-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.glossary-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.glossary-item-header .category-tag {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.glossary-term {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.glossary-reading {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 2px 0 6px;
+}
+
+.glossary-description {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}

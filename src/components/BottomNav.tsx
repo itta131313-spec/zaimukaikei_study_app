@@ -7,6 +7,10 @@ export default function BottomNav() {
         <span className="nav-icon">🏠</span>
         <span>ホーム</span>
       </NavLink>
+      <NavLink to="/glossary" className={({ isActive }) => (isActive ? 'active' : '')}>
+        <span className="nav-icon">📖</span>
+        <span>用語集</span>
+      </NavLink>
       <NavLink to="/records" className={({ isActive }) => (isActive ? 'active' : '')}>
         <span className="nav-icon">📊</span>
         <span>学習記録</span>
