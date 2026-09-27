@@ -1,9 +1,11 @@
-# main ブランチにプッシュされるたびに、アプリをビルドして GitHub Pages に公開する
+# アプリをビルドして GitHub Pages に公開する
+# リポジトリの公開と GitHub Pages の有効化が済むまでは、手動実行のみにしている。
+# 公開後は on: に次を追加すると、main へのプッシュのたびに自動公開される。
+#   push:
+#     branches: [main]
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
